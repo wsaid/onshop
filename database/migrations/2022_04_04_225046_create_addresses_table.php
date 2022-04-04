@@ -15,14 +15,11 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
-            $table->string('address');
-            $table->string('address2');
-            $table->string('district');
-            $table->string('city');
-            $table->string('country');
-            $table->string('postcode')->nullable();
-            $table->point('location')->nullable();
+            $table->string('label');    // home - office
+            $table->boolean('billing')->default(false);
+            $table->foreignId('user_id')->index();
+            $table->foreignId('location_id')->index();
+            
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('addresses');
     }
 }

@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Location;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 class AddressFactory extends Factory
 {
@@ -14,13 +17,13 @@ class AddressFactory extends Factory
     public function definition()
     {
         return [
-            'address' => $this->faker->streetAddress,
-            'address2' => $this->faker->secondaryAddress,
-            'district' => $this->faker->state,
-            'city' => $this->faker->city,
-            'country' => $this->faker->country,
-            'postcode' => $this->faker->postcode,
-
+            'label' => Arr::random([
+                'Home',
+                'Office'
+            ]),
+            'billing' => $this->faker->boolean,
+            'user_id' => User::factory()->create(),
+            'location_id' => Location::factory()->create()
         ];
     }
 }
