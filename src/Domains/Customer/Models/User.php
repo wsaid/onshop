@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace Domains\Customer\Models;
 
 use App\Traits\HasUuid;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,5 +48,10 @@ class User extends Authenticatable
 
     public function addresses() {
         return $this->hasMany(Address::class);
+    }
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
     }
 }
