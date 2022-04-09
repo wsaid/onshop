@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use Domains\Customer\Models\Location;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LocationFactory extends Factory
 {
+    protected $model = Location::class;
+
     /**
      * Define the model's default state.
      *
