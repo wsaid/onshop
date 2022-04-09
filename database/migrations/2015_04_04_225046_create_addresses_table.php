@@ -17,8 +17,8 @@ class CreateAddressesTable extends Migration
             $table->id();
             $table->string('label');    // home - office
             $table->boolean('billing')->default(false);
-            $table->foreignId('user_id')->index();
-            $table->foreignId('location_id')->index();
+            $table->foreignId('user_id')->nullable()->index()->constrained()->nullOnDelete();
+            $table->foreignId('location_id')->nullable()->index()->constrained()->nullOnDelete();
             
             $table->timestamps();
         });
