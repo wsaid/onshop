@@ -24,6 +24,15 @@ class Range extends Model
         'active' => 'boolean'
     ];
 
+    public function newEloquentBuilder($query)
+    {
+        return new RangeBuilder($query);
+    }
+
+    public function products() {
+        return $this->hasMany(Product::class);
+    }
+
     protected static function newFactory()
     {
         return RangeFactory::new();

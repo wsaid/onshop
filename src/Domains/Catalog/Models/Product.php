@@ -26,6 +26,11 @@ class Product extends Model
         'active' => 'boolean'
     ];
 
+    public function newEloquentBuilder($query)
+    {
+        return new ProductBuilder($query);
+    }
+
     public function category() {
         return $this->belongsTo(Category::class);
     }

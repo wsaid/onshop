@@ -24,6 +24,15 @@ class Category extends Model
         'active' => 'boolean'
     ];
 
+    public function newEloquentBuilder($query)
+    {
+        return new CategoryBuilder($query);
+    }   
+
+    public function products() {
+        return $this->hasMany(Product::class);
+    }
+
     protected static function newFactory()
     {
         return CategoryFactory::new();
