@@ -4,6 +4,7 @@ namespace Domains\Catalog\Models;
 
 use App\Traits\HasKey;
 use Database\Factories\ProductFactory;
+use Domains\Catalog\Builders\ProductBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,11 @@ class Product extends Model
         return new ProductBuilder($query);
     }
 
+    protected static function newFactory()
+    {
+        return ProductFactory::new();
+    }
+
     public function category() {
         return $this->belongsTo(Category::class);
     }
@@ -39,8 +45,8 @@ class Product extends Model
         return $this->belongsTo(Range::class);
     }
 
-    protected static function newFactory()
+    public function variants()
     {
-        return ProductFactory::new();
+        return $this->hasMany(Variant::class);
     }
 }

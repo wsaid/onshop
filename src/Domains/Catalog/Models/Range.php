@@ -4,6 +4,7 @@ namespace Domains\Catalog\Models;
 
 use App\Traits\HasKey;
 use Database\Factories\RangeFactory;
+use Domains\Catalog\Builders\RangeBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
