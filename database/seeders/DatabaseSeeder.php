@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Domains\Catalog\Models\Product;
+use Domains\Catalog\Models\Variant;
 use Domains\Customer\Models\Address;
 use Illuminate\Database\Seeder;
 
@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Address::factory(5)->create();
-        Product::factory(50)->create();
+        Variant::factory(50)->create();
     }
 }
