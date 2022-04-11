@@ -1,6 +1,6 @@
 <?php
 
-namespace Domains\Catalog\Models;
+namespace Domains\Catalog\Builders;
 
 use Domains\Shared\Models\Builders\HasActiveScope;
 use Illuminate\Database\Eloquent\Builder;
