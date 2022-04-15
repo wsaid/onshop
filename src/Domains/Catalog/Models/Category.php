@@ -13,7 +13,9 @@ class Category extends Model
     use HasFactory, HasKey;
 
     public $timestamps = false;
-    
+
+    public $resourceType = 'category';
+
     protected $fillable = [
         'key',
         'name',

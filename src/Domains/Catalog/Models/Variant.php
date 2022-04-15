@@ -12,6 +12,8 @@ class Variant extends Model
 {
     use HasFactory, HasKey;
 
+    public $resourceType = 'variant';
+
     protected $fillable = [
         'key',
         'name',

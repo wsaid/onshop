@@ -12,6 +12,8 @@ class Product extends Model
 {
     use HasFactory, HasKey;
 
+    public $resourceType = 'product';
+    
     protected $fillable = [
         'key',
         'name',
@@ -23,7 +25,7 @@ class Product extends Model
         'category_id'
     ];
 
-    public $casts = [
+    protected $casts = [
         'active' => 'boolean'
     ];
 

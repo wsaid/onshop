@@ -14,6 +14,8 @@ class Range extends Model
 
     public $timestamps = false;
 
+    public $resourceType = 'range';
+
     protected $fillable = [
         'key',
         'name',
