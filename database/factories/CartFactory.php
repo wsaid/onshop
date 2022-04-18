@@ -25,7 +25,7 @@ class CartFactory extends Factory
             'status' => Arr::random(CartStatus::toLabels()),
             'coupon' => $useCoupon ? $this->faker->imei() : null,
             'total' => $this->faker->numberBetween(10000, 100000),
-            'reduction' => $useCoupon ? $this->faker->numberBetween(150, 500): null,
+            'reduction' => $useCoupon ? $this->faker->numberBetween(150, 500): 0,
             'user_id' => User::factory()->create()
         ];
     }
