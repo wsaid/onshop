@@ -17,6 +17,7 @@ class CreateCartItemsTable extends Migration
             $table->id();
             $table->string('key')->unique();
 
+            $table->unsignedInteger('quantity');
             $table->morphs('purchasable');
 
             $table->foreignId('cart_id')->index()->nullable()->constrained()->nullOnDelete();
