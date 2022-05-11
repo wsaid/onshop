@@ -2,17 +2,17 @@
 
 namespace Domains\Customer\Models;
 
-use App\Traits\HasKey;
+use App\Traits\HasUuid;
 use Database\Factories\CartItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
-    use HasFactory, HasKey;
+    use HasFactory, HasUuid;
 
     protected $fillable = [
-        'key',
+        'uuid',
         'quantity',
         'purchasable_id',
         'purchasable_type',

@@ -2,7 +2,7 @@
 
 namespace Domains\Customer\Models;
 
-use App\Traits\HasKey;
+use App\Traits\HasUuid;
 use Database\Factories\CartFactory;
 use Domains\Customer\Enums\CartStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-    use HasFactory, HasKey;
+    use HasFactory, HasUuid;
+
+    public $resourceType = 'cart';
 
     protected $fillable = [
-        'key',
+        'uuid',
         'status',
         'total',
         'reduction',
