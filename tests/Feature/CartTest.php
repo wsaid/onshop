@@ -6,13 +6,14 @@ use Domains\Catalog\Models\Variant;
 use Domains\Customer\Enums\CartStatus;
 use Domains\Customer\Events\ProductAddedToCart;
 use Domains\Customer\Models\Cart;
+use Domains\Customer\Models\CartItem;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 use function Pest\Laravel\post;
 use function Pest\Laravel\get;
-
+use function Pest\Laravel\patch;
 
 it('Can create cart for unauthenticated user', function () {
 
@@ -49,7 +50,7 @@ it('Return no content when guest tries to retrieve a cart', function () {
 
 
 it('Can add a product to a cart', function () {
-    // expect(EloquentStoredEvent::query()->get())->toHaveCount(0);
+    expect(EloquentStoredEvent::query()->get())->toHaveCount(0);
 
     $cart = Cart::factory()->create();
     $variant = Variant::factory()->create();
@@ -63,6 +64,23 @@ it('Can add a product to a cart', function () {
         ]
     )->assertStatus(Response::HTTP_CREATED);
 
-    // expect(EloquentStoredEvent::query()->get())->toHaveCount(1);
-    // expect(EloquentStoredEvent::query()->first()->event_class)->toEqual(ProductAddedToCart::class);
+    expect(EloquentStoredEvent::query()->get())->toHaveCount(1);
+    expect(EloquentStoredEvent::query()->first()->event_class)->toEqual(ProductAddedToCart::class);
+});
+
+it('Can increase the quantity of an item in the cart', function() {
+    $cartItem = CartItem::factory()->create(['quantity' => 1]);
+    expect($cartItem->quantity)->toEqual(1);
+
+    patch(
+        route('api:v1:carts:products:update', [
+            'cart' => $cartItem->cart->uuid,
+            'item' => $cartItem->uuid
+        ]),
+        [
+            'quantity' => 5
+        ]
+    )->assertStatus(Response::HTTP_ACCEPTED);
+
+    expect(CartItem::query()->find($cartItem->id)->quantity)->toEqual(6);
 });

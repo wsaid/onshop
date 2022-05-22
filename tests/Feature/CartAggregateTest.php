@@ -14,19 +14,19 @@ it('Can store an event for adding a product', function() {
     $cart = Cart::factory()->create();
 
     $productAddedToCart = new ProductAddedToCart(
+        $cart->id,
         $variant->id,
         Variant::class,
-        $cart->id
     );
 
     CartAggregate::fake()
         ->given([$productAddedToCart])
         ->when(function(CartAggregate $cartAggregate) use($variant, $cart) {
-            $cartAggregate->addProduct($variant->id, Variant::class, $cart->id);
+            $cartAggregate->addProduct($cart->id, $variant->id, Variant::class);
         })
         ->assertEventRecorded(new ProductAddedToCart(
+            $cart->id,
             $variant->id,
-            Variant::class,
-            $cart->id
+            Variant::class
         ));
 });

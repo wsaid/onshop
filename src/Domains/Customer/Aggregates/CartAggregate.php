@@ -10,25 +10,25 @@ use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class CartAggregate extends AggregateRoot
 {
-    public function addProduct($purchasableID, $purchasableType, $cartID)
+    public function addProduct($cartID, $purchasableID, $purchasableType)
     {
-        return $this->recordThat(
-            new ProductAddedToCart($purchasableID, $purchasableType, $cartID)
+        $this->recordThat(
+            new ProductAddedToCart($cartID, $purchasableID, $purchasableType)
         );
         return $this;
     }
 
-    public function removeProduct($purchasableID, $purchasableType, $cartID)
+    public function removeProduct($cartID, $purchasableID, $purchasableType)
     {
-        return $this->recordThat(
-            new ProductRemovedFromCart($purchasableID, $purchasableType, $cartID)
+        $this->recordThat(
+            new ProductRemovedFromCart($cartID, $purchasableID, $purchasableType)
         );
         return $this;
     }
 
     public function increaseQuantity($cartID, $cartItemID, $quantity)
     {
-        return $this->recordThat(
+        $this->recordThat(
             new CartItemQuantityIncreased($cartID, $cartItemID, $quantity)
         );
         return $this;
@@ -36,7 +36,7 @@ class CartAggregate extends AggregateRoot
 
     public function decreaseQuantity($cartID, $cartItemID, $quantity)
     {
-        return $this->recordThat(
+        $this->recordThat(
             new CartItemQuantityDecreased($cartID, $cartItemID, $quantity)
         );
         return $this;

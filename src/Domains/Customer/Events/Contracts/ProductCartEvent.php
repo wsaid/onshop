@@ -6,8 +6,14 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 abstract class ProductCartEvent extends ShouldBeStored
 {
-    public function __construct($purchasableID, $purchasableType, $cartID)
+    public $cartID;
+    public $purchasableID;
+    public $purchasableType;
+    
+    public function __construct($cartID, $purchasableID, $purchasableType)
     {
-        
+        $this->cartID = $cartID;
+        $this->purchasableID = $purchasableID;
+        $this->purchasableType = $purchasableType;
     }
 }
