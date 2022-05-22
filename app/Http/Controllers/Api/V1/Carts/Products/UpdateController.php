@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Api\V1\Carts\Products;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Carts\ProductRequest;
+use App\Http\Requests\Api\V1\Carts\Products\UpdateRequest;
 use Domains\Customer\Aggregates\CartAggregate;
 use Domains\Customer\Models\Cart;
+use Domains\Customer\Models\CartItem;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class StoreController extends Controller
+class UpdateController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -17,19 +19,19 @@ class StoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(ProductRequest $request, Cart $cart)
+    public function __invoke(UpdateRequest $request, Cart $cart, CartItem $item)
     {
         CartAggregate::retrieve(
-            $cart->uuid,
-        )->addProduct(
-            $cart->id,
-            $request->get('purchasable_id'),
-            $request->get('purchasable_type'),
+            $item->cart->uuid,
+        )->increaseQuantity(
+            $item->cart->id,
+            $item->id,
+            $request->get('quantity'),
         )->persist();
 
         return new JsonResponse(
-             null,
-            Response::HTTP_CREATED,
+            null,
+            Response::HTTP_ACCEPTED,
         );
     }
 }

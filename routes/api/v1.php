@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Carts\IndexController as CartsIndexController;
 use App\Http\Controllers\Api\V1\Carts\Products\StoreController as ProductsStoreController;
+use App\Http\Controllers\Api\V1\Carts\Products\UpdateController as UpdateProductController;
 use App\Http\Controllers\Api\V1\Carts\StoreController;
 use App\Http\Controllers\Api\V1\Products\IndexController;
 use App\Http\Controllers\Api\V1\Products\ShowController;
@@ -37,4 +38,7 @@ Route::prefix('carts')->as('carts:')->group(function() {
     Route::post('/', StoreController::class)->name('store');
 
     Route::post('{cart:uuid}/products', ProductsStoreController::class)->name('products:store');
+
+    Route::patch('{cart:uuid}/products/{item:uuid}', UpdateProductController::class)->name('products:update');
+
 });

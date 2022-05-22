@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use Domains\Catalog\Models\Variant;
+use Domains\Customer\Projectors\CartProjector;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Spatie\EventSourcing\Facades\Projectionist;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Projectionist::addProjector(
+            CartProjector::class
+        );
     }
 
     /**
