@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Carts\IndexController as CartsIndexController;
+use App\Http\Controllers\Api\V1\Carts\Products\DeleteController as DeleteProductController;
 use App\Http\Controllers\Api\V1\Carts\Products\StoreController as ProductsStoreController;
 use App\Http\Controllers\Api\V1\Carts\Products\UpdateController as UpdateProductController;
 use App\Http\Controllers\Api\V1\Carts\StoreController;
@@ -41,4 +42,5 @@ Route::prefix('carts')->as('carts:')->group(function() {
 
     Route::patch('{cart:uuid}/products/{item:uuid}', UpdateProductController::class)->name('products:update');
 
+    Route::delete('{cart:uuid}/products/{item:uuid}', DeleteProductController::class)->name('products:delete');
 });

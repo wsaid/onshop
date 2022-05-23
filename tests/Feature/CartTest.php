@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use function Pest\Laravel\post;
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
+use function Pest\Laravel\delete;
 
 it('Can create cart for unauthenticated user', function () {
 
@@ -103,7 +104,7 @@ it('Can decrease the quantity of an item in the cart', function() {
     expect(CartItem::query()->find($cartItem->id)->quantity)->toEqual(3);
 });
 
-it('Can remove an item from the cart', function() {
+it('Remove an item from the cart when quantity is zero', function() {
     $cartItem = CartItem::factory()->create(['quantity' => 1]);
     expect($cartItem->quantity)->toEqual(1);
     expect(CartItem::all())->toHaveCount(1);
@@ -120,5 +121,19 @@ it('Can remove an item from the cart', function() {
 
     expect(EloquentStoredEvent::query()->get())->toHaveCount(1);
     expect(EloquentStoredEvent::query()->first()->event_class)->toEqual(ProductRemovedFromCart::class);
+    expect(CartItem::all())->toHaveCount(0);
+});
+
+it('Can remove an item from the cart', function() {
+    $cartItem = CartItem::factory()->create(['quantity' => 1]);
+    expect($cartItem->quantity)->toEqual(1);
+    
+    delete(
+        route('api:v1:carts:products:delete', [
+            'cart' => $cartItem->cart->uuid,
+            'item' => $cartItem->uuid
+        ])
+    )->assertStatus(Response::HTTP_ACCEPTED);
+
     expect(CartItem::all())->toHaveCount(0);
 });
