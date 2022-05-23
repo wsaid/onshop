@@ -17,11 +17,7 @@ class ChangeCartItemQuantity
 
         switch ($quantity) {
             case 0:
-                $aggregate->removeProduct(
-                    $item->cart->id,
-                    $item->id,
-                    get_class($item->purchasable)
-                )->persist();
+                RemoveProductFromCart::handle($cart, $item);
                 break;
             case $quantity > $item->quantity:
                 $aggregate->increaseQuantity(
