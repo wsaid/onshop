@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Carts\Products;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Carts\Products\UpdateRequest;
+use Domains\Customer\Actions\ChangeCartItemQuantity;
 use Domains\Customer\Aggregates\CartAggregate;
 use Domains\Customer\Models\Cart;
 use Domains\Customer\Models\CartItem;
@@ -21,13 +22,11 @@ class UpdateController extends Controller
      */
     public function __invoke(UpdateRequest $request, Cart $cart, CartItem $item)
     {
-        CartAggregate::retrieve(
-            $item->cart->uuid,
-        )->increaseQuantity(
-            $item->cart->id,
-            $item->id,
-            $request->get('quantity'),
-        )->persist();
+        ChangeCartItemQuantity::handle(
+            $cart,
+            $item,
+            $request->get('quantity')
+        );
 
         return new JsonResponse(
             null,

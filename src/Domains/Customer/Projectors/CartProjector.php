@@ -31,7 +31,7 @@ class CartProjector extends Projector
 
         $cart->items()->where([
             'purchasable_id' => $event->purchasableID,
-            'purchasable_type' => $event->type
+            'purchasable_type' => $event->purchasableType
         ])->delete();
     }
 

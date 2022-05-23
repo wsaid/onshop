@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Domains\Catalog\Models\Variant;
 use Domains\Customer\Enums\CartStatus;
 use Domains\Customer\Events\ProductAddedToCart;
+use Domains\Customer\Events\ProductRemovedFromCart;
 use Domains\Customer\Models\Cart;
 use Domains\Customer\Models\CartItem;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -83,4 +84,41 @@ it('Can increase the quantity of an item in the cart', function() {
     )->assertStatus(Response::HTTP_ACCEPTED);
 
     expect(CartItem::query()->find($cartItem->id)->quantity)->toEqual(6);
+});
+
+it('Can decrease the quantity of an item in the cart', function() {
+    $cartItem = CartItem::factory()->create(['quantity' => 5]);
+    expect($cartItem->quantity)->toEqual(5);
+
+    patch(
+        route('api:v1:carts:products:update', [
+            'cart' => $cartItem->cart->uuid,
+            'item' => $cartItem->uuid
+        ]),
+        [
+            'quantity' => 2
+        ]
+    )->assertStatus(Response::HTTP_ACCEPTED);
+
+    expect(CartItem::query()->find($cartItem->id)->quantity)->toEqual(3);
+});
+
+it('Can remove an item from the cart', function() {
+    $cartItem = CartItem::factory()->create(['quantity' => 1]);
+    expect($cartItem->quantity)->toEqual(1);
+    expect(CartItem::all())->toHaveCount(1);
+
+    patch(
+        route('api:v1:carts:products:update', [
+            'cart' => $cartItem->cart->uuid,
+            'item' => $cartItem->uuid
+        ]),
+        [
+            'quantity' => 0
+        ]
+    )->assertStatus(Response::HTTP_ACCEPTED);
+
+    expect(EloquentStoredEvent::query()->get())->toHaveCount(1);
+    expect(EloquentStoredEvent::query()->first()->event_class)->toEqual(ProductRemovedFromCart::class);
+    expect(CartItem::all())->toHaveCount(0);
 });

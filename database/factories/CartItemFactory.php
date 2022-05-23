@@ -23,7 +23,7 @@ class CartItemFactory extends Factory
         return [
             'quantity' => $this->faker->numberBetween(1, 12),
             'purchasable_id' => $variant->id,
-            'purchasable_type' => 'variant',
+            'purchasable_type' => Variant::class,
             'cart_id' => Cart::factory()->create(),
         ];
     }
