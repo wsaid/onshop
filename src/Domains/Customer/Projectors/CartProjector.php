@@ -5,10 +5,12 @@ namespace Domains\Customer\Projectors;
 use Domains\Customer\Aggregates\CartAggregate;
 use Domains\Customer\Events\CartItemQuantityDecreased;
 use Domains\Customer\Events\CartItemQuantityIncreased;
+use Domains\Customer\Events\CouponApplied;
 use Domains\Customer\Events\ProductAddedToCart;
 use Domains\Customer\Events\ProductRemovedFromCart;
 use Domains\Customer\Models\Cart;
 use Domains\Customer\Models\CartItem;
+use Domains\Customer\Models\Coupon;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Illuminate\Support\Str;
 
@@ -49,5 +51,21 @@ class CartProjector extends Projector
                 ->removeProduct($cartItem->purchasable_id, $cartItem->purchasable_type, $cartItem->cart_id);
         }
         $cartItem->decrement('quantity', $event->quantity);
+    }
+
+    public function onCouponApplied(CouponApplied $event)
+    {
+        $coupon = Coupon::query()->where(
+            'code', 
+            $event->code
+        )->first();
+        
+        Cart::query()->where(
+            'id',
+            $event->cartID
+        )->update([
+            'coupon' => $coupon->code,
+            'reduction' => $coupon->reduction
+        ]);
     }
 }

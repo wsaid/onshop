@@ -18,6 +18,7 @@ class Cart extends Model
         'uuid',
         'status',
         'total',
+        'coupon',
         'reduction',
         'user_id'
     ];
