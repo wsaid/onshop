@@ -6,6 +6,7 @@ use Domains\Customer\Aggregates\CartAggregate;
 use Domains\Customer\Events\CartItemQuantityDecreased;
 use Domains\Customer\Events\CartItemQuantityIncreased;
 use Domains\Customer\Events\CouponApplied;
+use Domains\Customer\Events\CouponRemoved;
 use Domains\Customer\Events\ProductAddedToCart;
 use Domains\Customer\Events\ProductRemovedFromCart;
 use Domains\Customer\Models\Cart;
@@ -66,6 +67,17 @@ class CartProjector extends Projector
         )->update([
             'coupon' => $coupon->code,
             'reduction' => $coupon->reduction
+        ]);
+    }
+
+    public function onCouponRemoved(CouponRemoved $event)
+    {
+        Cart::query()->where(
+            'id',
+            $event->cartID
+        )->update([
+            'coupon' => null,
+            'reduction' => 0
         ]);
     }
 }

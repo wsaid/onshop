@@ -5,6 +5,7 @@ namespace Domains\Customer\Aggregates;
 use Domains\Customer\Events\CartItemQuantityDecreased;
 use Domains\Customer\Events\CartItemQuantityIncreased;
 use Domains\Customer\Events\CouponApplied;
+use Domains\Customer\Events\CouponRemoved;
 use Domains\Customer\Events\ProductAddedToCart;
 use Domains\Customer\Events\ProductRemovedFromCart;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
@@ -47,6 +48,14 @@ class CartAggregate extends AggregateRoot
     {
         $this->recordThat(
             new CouponApplied($cartID, $code)
+        );
+        return $this;
+    }
+
+    public function removeCoupon($cartID, $code)
+    {
+        $this->recordThat(
+            new CouponRemoved($cartID, $code)
         );
         return $this;
     }

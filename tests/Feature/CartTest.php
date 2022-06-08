@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Domains\Catalog\Models\Variant;
 use Domains\Customer\Enums\CartStatus;
 use Domains\Customer\Events\CouponApplied;
+use Domains\Customer\Events\CouponRemoved;
 use Domains\Customer\Events\ProductAddedToCart;
 use Domains\Customer\Events\ProductRemovedFromCart;
 use Domains\Customer\Models\Cart;
@@ -160,4 +161,30 @@ it('can apply a coupon on the cart', function() {
 
     expect(EloquentStoredEvent::query()->get())->toHaveCount(1);
     expect(EloquentStoredEvent::query()->first()->event_class)->toEqual(CouponApplied::class);
+});
+
+it('can delete a coupon from the cart', function() {
+    $coupon = Coupon::factory()->create();
+    
+    $cart = Cart::factory()->create(['coupon' => null, 'reduction' => 0]);
+
+    $cart->update([
+        'coupon' => $coupon->code,
+        'reduction' => $coupon->reduction
+    ]);
+
+    expect($cart->refresh()->reduction)->toEqual($coupon->reduction);
+
+    delete(
+        route('api:v1:carts:coupons:delete', [
+            'cart' => $cart->uuid,
+            'uuid' => $coupon->uuid
+        ])
+    )->assertStatus(Response::HTTP_ACCEPTED);
+
+    expect($cart->refresh()->reduction)->toEqual(0);
+    expect($cart->refresh()->coupon)->toBeNull();
+
+    expect(EloquentStoredEvent::query()->get())->toHaveCount(1);
+    expect(EloquentStoredEvent::query()->first()->event_class)->toEqual(CouponRemoved::class);
 });
