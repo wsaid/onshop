@@ -2,17 +2,17 @@
 
 namespace Domains\Customer\Models;
 
-use App\Traits\HasKey;
+use App\Traits\HasUuid;
 use Database\Factories\CouponFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Coupon extends Model
 {
-    use HasFactory, HasKey;
+    use HasFactory, HasUuid;
 
     protected $fillable = [
-        'key',
+        'uuid',
         'code',
         'reduction',
         'uses',
